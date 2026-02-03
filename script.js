@@ -37,10 +37,13 @@ function updateRound() {
 
 function gameWin() {
     document.querySelector("#game-winner").textContent = "Game Winner: " + gameWinner;
-    const body = document.querySelector("body")
-    resetButton = document.createElement("button")
-    resetButton.textContent = "Reset"
-    body.appendChild(resetButton)
+    if (!document.querySelector("#reset-button")) {
+        const body = document.querySelector("body")
+        resetButton = document.createElement("button")
+        resetButton.setAttribute("id", "reset-button")
+        resetButton.textContent = "Reset"
+        body.appendChild(resetButton)
+    }
     resetButton.addEventListener("click", () => {
         scoreComputer = 0;
         scoreHuman = 0;
@@ -50,6 +53,7 @@ function gameWin() {
         document.querySelector("#computer-score").textContent = "Computer Score: " + scoreComputer;
         document.querySelector("#round-result").textContent = "Round Result: " + result;
         document.querySelector("#game-winner").textContent = "Game Winner: " + gameWinner;
+        document.querySelector("#buttons").addEventListener("click", handleButtonClick)
     })
 }
 
@@ -60,7 +64,7 @@ let gameWinner = "";
 document.querySelector("#round-results").addEventListener('update', updateRound)
 document.querySelector("#game-winner").addEventListener('winner', gameWin)
 
-document.querySelector("#buttons").addEventListener("click", (e) => {
+function handleButtonClick(e) {
     console.log(e);
     let choice = getHumanChoice(e);
     console.log(choice);
@@ -78,5 +82,9 @@ document.querySelector("#buttons").addEventListener("click", (e) => {
         gameWinner = "Tie";
     } 
     document.querySelector("#game-winner").dispatchEvent(new Event('winner'));
+    document.querySelector("#buttons").removeEventListener("click", handleButtonClick);
+    // document.querySelector("#buttons").style.display = "none";
     }
-})
+}
+
+document.querySelector("#buttons").addEventListener("click", handleButtonClick);
